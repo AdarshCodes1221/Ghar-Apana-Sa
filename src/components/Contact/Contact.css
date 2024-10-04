@@ -1,0 +1,80 @@
+.c-container {
+    justify-content: space-between;
+}
+
+.c-container > div {
+    flex: 1;
+}
+
+.c-right {
+    width: 100%;
+}
+
+.c-left {
+    gap: 0.5rem;
+}
+
+.contactModes {
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.contactModes .row {
+    gap: 1.5rem;
+}
+
+.mode {
+    width: 16rem;
+    padding: 1rem;
+    border: 0.8px solid rgba(128, 128, 128, 0.143);
+    border-radius: 5px;
+    gap: 1rem;
+    transition: all 300ms ease-in-out;
+}
+
+/* Call card hover effect */
+.mode:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-5px); /* Lift the card on hover */
+}
+
+/* Button styling */
+.mode .button {
+    width: 100%;
+    background: var(--lightBlue);
+    color: var(--blue);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.mode > :nth-child(1) {
+    width: 100%;
+    gap: 1.6rem;
+}
+
+.mode .detail .primaryText {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Only change the button color on hover/touch */
+.mode .button:hover {
+    background: var(--blue);
+    color: white;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  
+  .mode {
+    width: 16rem;
+    padding: 1rem;
+    border: 0.8px solid rgba(128, 128, 128, 0.143);
+    border-radius: 5px;
+    transition: all 300ms ease-in-out;
+  }
+  

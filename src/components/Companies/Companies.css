@@ -1,0 +1,33 @@
+.companies-wrapper {
+  width: 100%;
+  background-color: #f7f7f7;
+  padding: 20px 0;
+}
+
+.companies-innerWidth {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.companies-flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.companies-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.companies-image {
+  width: 150px;
+  height: auto;
+  margin: 0 20px;
+  transition: transform 0.5s ease;
+}
+
+.companies-image:hover {
+  transform: scaleX(-1); /* Flip the image horizontally on hover */
+}

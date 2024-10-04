@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Lodha Sky Gardens",
+    "price": "55,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹1.3 cr",
+    "detail": "Pimple Saudagar, Pune, Maharashtra, India",
+    "image": "./r1.jpg"
+  },
+  {
+    "name": "Godrej Infinity",
+    "price": "30,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹80 L - ₹1.25 cr",
+    "detail": "Kalyani Nagar, Pune, Maharashtra, India",
+    "image": "./r2.png"
+  },
+  {
+    "name": "DLF Crest",
+    "price": "42,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹1.35 cr",
+    "detail": "Lavasa, Pune, Maharashtra, India",
+    "image": "./r3.png"
+  },
+  {
+    "name": "American Towers",
+    "price": "65,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹1.5 cr",
+    "detail": "Wakad, Pune, Maharashtra, India",
+    "image": "./r1.png"
+  },
+  {
+    "name": "Lodha Belmondo",
+    "price": "85,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹1.6 cr",
+    "detail": "Hinjewadi, Pune, Maharashtra, India",
+    "image": "./r2.png"
+  },
+  {
+    "name": "Godrej Greens",
+    "price": "50,000",
+    "bhk": "2 BHK, 3 BHK",
+    "price_start": "₹90 L",
+    "detail": "Baner, Pune, Maharashtra, India",
+    "image": "./r3.png"
+  }
+]

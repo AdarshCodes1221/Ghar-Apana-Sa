@@ -1,0 +1,60 @@
+.f-wrapper {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 20px 0;
+  }
+  
+  .f-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .f-left img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .f-left img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .f-vision {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .f-right {
+    text-align: left;
+  }
+  
+  .f-links {
+    margin-top: 10px;
+  }
+  
+  .f-links a {
+    color: #333;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 16px;
+  }
+  
+  .f-links a:hover {
+    color: red;
+    border-bottom: 2px solid red;
+  }
+  
+  .primary-text {
+    color: #003366;
+    font-weight: bold;
+    font-size: 24px;  
+  }
+  
+  .f-right p {
+    font-size: 18px;  
+  }
+  
