@@ -2,7 +2,6 @@ import React from 'react';
 import './Contact.css';
 import { MdCall } from 'react-icons/md';
 import { BsFillChatDotsFill } from 'react-icons/bs';
-import { HiChatBubbleBottomCenter } from 'react-icons/hi2';
 
 const Contact = () => {
   return (
@@ -72,7 +71,7 @@ const Contact = () => {
               <div className="flexColCenter mode">
                 <div className="flexStart">
                   <div className="flexCenter icon">
-                    <HiChatBubbleBottomCenter size={25} />
+                    <BsFillChatDotsFill size={25} />
                   </div>
                   <div className="flexColStart detail">
                     <span className='primaryText'>Message</span>
