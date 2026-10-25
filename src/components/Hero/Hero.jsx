@@ -36,7 +36,7 @@ const Hero = () => {
 
           {/* Left Side Content */}
           <div className="hero-left">
-            <h1>Ghar Aapna Sa:<br/> Your Personalized Home Experience</h1>
+            <h1>Ghar Aapna Sa2:<br/> Your Personalized Home Experience</h1>
             <p className="hero-description">Find the suitable property that suits you.</p>
 
             {/* Search Bar */}
