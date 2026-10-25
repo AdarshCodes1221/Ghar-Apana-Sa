@@ -15,6 +15,10 @@ RUN npm run build
 # Stage 2: Serve production build
 FROM nginx:alpine
 
+# Update Alpine packages to receive available security fixes
+RUN apk update && apk upgrade --no-cache
+
+# Copy the production build into Nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
