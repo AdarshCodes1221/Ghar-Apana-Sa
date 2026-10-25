@@ -1,0 +1,205 @@
+pipeline {
+    agent none
+
+    triggers {
+        // Check GitHub for new commits approximately every 2 minutes.
+        pollSCM('H/2 * * * *')
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    environment {
+        IMAGE_NAME = 'ghar-apana-sa'
+    }
+
+    stages {
+
+        // 1. CHECKOUT, INSTALL, SECURITY AUDIT AND FRONTEND BUILD
+        stage('Frontend Build') {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                }
+            }
+
+            stages {
+                stage('Checkout') {
+                    steps {
+                        git branch: 'main',
+                            url: 'https://github.com/AdarshCodes1221/Ghar-Apana-Sa.git'
+                    }
+                }
+
+                stage('Install Dependencies') {
+                    steps {
+                        sh 'npm ci'
+                    }
+                }
+
+                stage('Security Audit') {
+                    steps {
+                        sh 'npm audit --audit-level=high'
+                    }
+                }
+
+                stage('Build Application') {
+                    steps {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+
+        // 2. SONARQUBE CODE ANALYSIS
+        stage('SonarQube Analysis') {
+            agent any
+
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                              -Dsonar.projectKey=ghar-apana-sa \
+                              -Dsonar.projectName=Ghar-Apana-Sa \
+                              -Dsonar.sources=src \
+                              -Dsonar.exclusions=node_modules/**,dist/** \
+                              -Dsonar.sourceEncoding=UTF-8 \
+                              -Dsonar.qualitygate.wait=false
+                        """
+                    }
+                }
+            }
+        }
+
+        // 3. QUALITY GATE
+        stage('Quality Gate') {
+            agent none
+
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        // 4. BUILD A VERSIONED DOCKER IMAGE
+        stage('Docker Build') {
+            agent any
+
+            steps {
+                sh '''
+                    docker build --pull --no-cache \
+                      -t ${IMAGE_NAME}:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        // 5. SECURITY SCAN
+        stage('Trivy Scan') {
+            agent any
+
+            steps {
+                sh '''
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      aquasec/trivy:latest image \
+                      --severity HIGH,CRITICAL \
+                      --exit-code 1 \
+                      ${IMAGE_NAME}:${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        // 6. DEPLOY THE PRODUCTION BUILD TO GITHUB PAGES
+        stage('Deploy to GitHub Pages') {
+            agent any
+
+            steps {
+                // Ensure the frontend build exists before publishing.
+                sh 'test -f dist/index.html'
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-pages-deploy',
+                        usernameVariable: 'GH_USER',
+                        passwordVariable: 'GH_TOKEN'
+                    )
+                ]) {
+                    dir('dist') {
+                        sh '''
+                            set +x
+                            set -eu
+
+                            # GitHub Pages should publish these static files.
+                            touch .nojekyll
+
+                            # Initialize a clean publishing repository.
+                            rm -rf .git
+                            git init -b gh-pages
+
+                            git config user.name "Jenkins CI"
+                            git config user.email \
+                              "jenkins-ci@users.noreply.github.com"
+
+                            git add -A
+                            git commit -m "Deploy build ${BUILD_NUMBER}"
+
+                            # Use the Jenkins credential without printing
+                            # the GitHub token in the console.
+                            AUTH="$(printf '%s:%s' "$GH_USER" "$GH_TOKEN" \
+                              | base64 | tr -d '\\n')"
+
+                            git -c http.extraheader="AUTHORIZATION: basic ${AUTH}" \
+                              push --force \
+                              https://github.com/AdarshCodes1221/Ghar-Apana-Sa.git \
+                              HEAD:gh-pages
+                        '''
+                    }
+                }
+
+                echo 'Production build published to GitHub Pages.'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '''
+            =========================================
+              DEVSECOPS PIPELINE SUCCESS
+            =========================================
+
+              GitHub Checkout        : PASSED
+              Dependencies           : PASSED
+              NPM Security Audit     : PASSED
+              React/Vite Build       : PASSED
+              SonarQube Analysis     : PASSED
+              Quality Gate           : PASSED
+              Docker Image Build     : PASSED
+              Trivy Security Scan    : PASSED
+              GitHub Pages Deploy    : PASSED
+
+              Public Website:
+              https://adarshcodes1221.github.io/Ghar-Apana-Sa/
+
+            =========================================
+            '''
+        }
+
+        failure {
+            echo '''
+            =========================================
+              DEVSECOPS PIPELINE FAILED
+            =========================================
+              Check Console Output for the first
+              failed stage. Later stages are skipped.
+            =========================================
+            '''
+        }
+    }
+}
